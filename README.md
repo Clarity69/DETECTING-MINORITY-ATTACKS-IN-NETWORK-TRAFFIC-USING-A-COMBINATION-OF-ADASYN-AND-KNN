@@ -31,10 +31,11 @@ Tujuannya adalah melihat apakah ADASYN dapat menaikkan **recall** dan **F1-score
 
 ```
 .
-├── KNNADASYN.ipynb      # Skrip utama eksperimen
+├── KNNADASYN.ipynb             # Notebook utama eksperimen
 ├── data set pak fiki 1.csv     # Dataset (separator ;)
+├── FlowChart.drawio.svg        # Diagram alur penelitian
 ├── README.md
-└── hasil_knn_adasyn/           # Dibuat otomatis saat skrip dijalankan
+└── hasil_knn_adasyn/           # Dibuat otomatis saat notebook dijalankan
 ```
 
 ## Dataset
@@ -58,24 +59,35 @@ Data tanpa label **tidak dianggap benign** dan dibuang dari eksperimen karena me
 
 ## Instalasi
 
-Butuh Python 3.9 atau lebih baru. Pasang library yang diperlukan:
+Butuh Python 3.9 atau lebih baru dan Jupyter. Pasang library yang diperlukan:
 
 ```bash
-pip install pandas numpy matplotlib seaborn scikit-learn imbalanced-learn
+pip install pandas numpy matplotlib seaborn scikit-learn imbalanced-learn jupyter
 ```
 
 ## Cara Menjalankan
 
-1. Taruh file `data set pak fiki 1.csv` di folder yang sama dengan skrip.
-2. Jalankan:
+1. Pastikan `data set pak fiki 1.csv` berada di folder yang sama dengan `KNNADASYN.ipynb`.
+2. Buka notebook:
 
 ```bash
-python knn_adasyn_piechart.py
+jupyter notebook KNNADASYN.ipynb
 ```
 
-Skrip mencetak hasil tiap tahap ke terminal dan menampilkan grafik satu per satu. Tutup jendela grafik agar skrip lanjut ke tahap berikutnya. Semua hasil disimpan di folder `hasil_knn_adasyn/`.
+   Bisa juga dibuka lewat JupyterLab, VS Code, atau Google Colab (unggah dataset ke Colab terlebih dahulu).
+3. Jalankan semua sel secara berurutan, misalnya lewat menu **Run → Run All Cells** atau **Kernel → Restart & Run All**.
+
+Hasil tiap tahap dan semua grafik tampil langsung di bawah sel masing-masing. Semua hasil juga disimpan di folder `hasil_knn_adasyn/`.
+
+Untuk menjalankan notebook tanpa membuka antarmuka Jupyter:
+
+```bash
+jupyter nbconvert --to notebook --execute KNNADASYN.ipynb --output KNNADASYN_executed.ipynb
+```
 
 ## Alur Eksperimen
+
+![Flowchart penelitian](FlowChart.drawio.svg)
 
 | No | Tahap | Keterangan |
 |---|---|---|
@@ -108,7 +120,7 @@ Pemisahan fitur numerik dan kategorikal dilakukan otomatis berdasarkan tipe data
 
 ## Konfigurasi
 
-Semua parameter ada di bagian **2. KONFIGURASI** pada skrip:
+Semua parameter ada di bagian **2. KONFIGURASI** pada notebook:
 
 | Variabel | Nilai | Fungsi |
 |---|---|---|
@@ -124,7 +136,7 @@ Parameter lain: ADASYN memakai `n_neighbors=5`, dan KNN memakai jarak bawaan sci
 
 - **Evaluasi utama: hold-out 80:20 dengan stratifikasi.** Kedua model dilatih sekali di data latih dan diuji sekali di data uji yang sama. Semua metrik di tabel perbandingan berasal dari skema ini.
 - **Learning curve: 5-fold cross validation** (Stratified K-Fold, otomatis untuk klasifikasi) pada data latih, dengan metrik F1. Hasilnya hanya dipakai untuk kurva dan analisis gap train vs validation, bukan untuk tabel perbandingan.
-- Skrip ini **tidak** memakai 10-fold cross validation.
+- Notebook ini **tidak** memakai 10-fold cross validation.
 
 Metrik yang dilaporkan dihitung untuk kelas positif DDoS (`label = 1`):
 
@@ -150,7 +162,7 @@ Semua file disimpan di `hasil_knn_adasyn/`:
 | `dataset_cleaned_labeled.csv` | Dataset berlabel setelah cleaning dan feature engineering |
 | `dataset_processed_features.csv` | 17 fitur terpilih dan label |
 
-Selain itu, terminal menampilkan distribusi kelas, *classification report*, *confusion matrix* dan analisis gap learning curve.
+Selain itu, output sel notebook menampilkan distribusi kelas, *classification report*, *confusion matrix* dan analisis gap learning curve.
 
 ## Catatan Metodologi
 
